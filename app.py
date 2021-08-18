@@ -16,16 +16,16 @@ import requests
 import json
 
 def get_live_matches():
-    r = requests.get(f'https://api.betting-api.com/fonbet/football/live/all', headers=api_headers)
+    r = requests.get(f'https://api.betting-api.com/1xbet/football/live/all', headers=api_headers)
     matches = json.loads(r.content.decode())
-    matches = [[match['id'], match['team1'], match['team2'], match['markets']['win1']['v'], match['markets']['winX']['v'], match['markets']['win2']['v'], match['league'], match['league_id'], 'Live'] for match in matches if ('win1' in match['markets'].keys()) and ('winX' in match['markets'].keys()) and ('league' in match.keys())]
+    matches = [[match['id'], match['team1'], match['team2'], match['markets']['win1']['v'], match['markets']['winX']['v'], match['markets']['win2']['v'], match['league']['name'], match['league']['league_id'], 'Live'] for match in matches if ('win1' in match['markets'].keys()) and ('winX' in match['markets'].keys()) and ('league' in match.keys())]
     
     return matches
 
 def get_pre_matches():
-    r = requests.get(f'https://api.betting-api.com/fonbet/football/line/all', headers=api_headers)
+    r = requests.get(f'https://api.betting-api.com/1xbet/football/line/all', headers=api_headers)
     matches = json.loads(r.content.decode())
-    matches = [[match['id'], match['team1'], match['team2'], match['markets']['win1']['v'], match['markets']['winX']['v'], match['markets']['win2']['v'], match['league'], match['league_id'], 'PreMatch'] for match in matches if ('win1' in match['markets'].keys()) and ('winX' in match['markets'].keys()) and ('league' in match.keys())]
+    matches = [[match['id'], match['team1'], match['team2'], match['markets']['win1']['v'], match['markets']['winX']['v'], match['markets']['win2']['v'], match['league']['name'], match['league']['league_id'], 'PreMatch'] for match in matches if ('win1' in match['markets'].keys()) and ('winX' in match['markets'].keys()) and ('league' in match.keys())]
     
     return matches
 
@@ -86,7 +86,7 @@ app.layout = html.Div(children=[
         html.H1('Select league:'),
         dcc.Dropdown(
             'leagues-dropdown',
-            options=[{'label': label, 'value': value} for label, value in data[['league', 'league_id']].drop_duplicates().itertuples(index = False, name = None)]
+            options=[{'label': label, 'value': value} for label, value in data[['league', 'league_id']].itertuples(index = False, name = None)]
         ),
     ],
         className = 'card'
@@ -144,7 +144,7 @@ def update_data(n):
         last_update = datetime.datetime.now()
         data = get_prediction()
 
-    return [{'label': label, 'value': value} for label, value in data[['league', 'league_id']].drop_duplicates().itertuples(index = False, name = None)]
+    return [{'label': label, 'value': value} for label, value in data[['league', 'league_id']].itertuples(index = False, name = None)]
 
 @app.callback(
     Output('score', 'children'),
