@@ -8,7 +8,7 @@ import dash_html_components as html
 import dash_core_components as dcc
 import dash
 
-import tensorflow.keras as keras
+import keras
 import pandas as pd
 import datetime
 import requests
