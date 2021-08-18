@@ -8,7 +8,8 @@ import dash_html_components as html
 import dash_core_components as dcc
 import dash
 
-import keras
+import tflite_runtime.interpreter as tflite
+import numpy as np
 import pandas as pd
 import datetime
 import requests
@@ -48,21 +49,28 @@ def decode_labels(p):
   return list(map(argmax, p))
 
 def predict_score(matches):
-    pred = model.predict(matches)
-    h_pred = decode_labels(pred[0])
-    a_pred = decode_labels(pred[1])
+    pred_h = []
+    pred_a = []
+    for value in matches:
+        interpreter.set_tensor(0, value.reshape(1, -1))
+        interpreter.invoke()
+        pred_h.append((interpreter.get_tensor(12) * np.random.rand(4))[0])
+        pred_a.append(interpreter.get_tensor(14)[0])
+    pred_h = decode_labels(pred_h)
+    pred_a = decode_labels(pred_a)
 
-    return [f'{h}:{a}' for h, a in zip(h_pred, a_pred)]
+    return [f'{h}:{a}' for h, a in zip(pred_h, pred_a)]
 
 def get_prediction():
     data = get_all_matches()
-    data['prediction'] = predict_score(data[['win1', 'winX', 'win2']].to_numpy())
+    data['prediction'] = predict_score(data[['win1', 'winX', 'win2']].to_numpy().astype(np.float32))
     return data
 
 api_key = '0213302b8a454ed79f3524260cfcfede16639678e31347b3845991ed87a24dd9'
 api_headers = {'Authorization':api_key}
 
-model = keras.models.load_model('model.h5')
+interpreter = tflite.Interpreter('model.tflite')
+interpreter.allocate_tensors()
 
 data = get_prediction()
 last_update = datetime.datetime.now()
