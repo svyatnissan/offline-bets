@@ -1,3 +1,4 @@
 gunicorn
 dash
--i https://google-coral.github.io/py-repo/ tflite_runtime
+-i https://google-coral.github.io/py-repo/
+tflite_runtime
