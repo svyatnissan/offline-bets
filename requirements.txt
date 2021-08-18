@@ -1,4 +1,4 @@
 pandas
 gunicorn
 dash
-keras
+https://google-coral.github.io/py-repo/ tflite_runtime
