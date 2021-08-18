@@ -1,4 +1,3 @@
-pandas
 gunicorn
 dash
 -i https://google-coral.github.io/py-repo/ tflite_runtime
