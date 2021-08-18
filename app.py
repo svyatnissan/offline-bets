@@ -86,7 +86,7 @@ app.layout = html.Div(children=[
         html.H1('Select league:'),
         dcc.Dropdown(
             'leagues-dropdown',
-            options=[{'label': label, 'value': value} for label, value in data[['league', 'league_id']].itertuples(index = False, name = None)]
+            options=[{'label': label, 'value': value} for label, value in data[['league', 'league_id']].drop_duplicates().itertuples(index = False, name = None)]
         ),
     ],
         className = 'card'
@@ -144,7 +144,7 @@ def update_data(n):
         last_update = datetime.datetime.now()
         data = get_prediction()
 
-    return [{'label': label, 'value': value} for label, value in data[['league', 'league_id']].itertuples(index = False, name = None)]
+    return [{'label': label, 'value': value} for label, value in data[['league', 'league_id']].drop_duplicates().itertuples(index = False, name = None)]
 
 @app.callback(
     Output('score', 'children'),
