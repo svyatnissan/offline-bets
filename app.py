@@ -17,7 +17,7 @@ import json
 
 def get_live_matches():
     r = requests.get(f'https://api.betting-api.com/1xbet/football/live/all', headers=api_headers)
-
+    print(r.content.decode()[80000:80020])
     matches = json.loads(r.content.decode())
     matches = [[match['id'], match['team1'], match['team2'], match['markets']['win1']['v'], match['markets']['winX']['v'], match['markets']['win2']['v'], match['league']['name'], match['league']['league_id'], 'Live'] for match in matches if ('win1' in match['markets'].keys()) and ('winX' in match['markets'].keys()) and ('league' in match.keys())]
     
