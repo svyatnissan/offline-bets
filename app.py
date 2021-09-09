@@ -86,7 +86,7 @@ def get_prediction():
     data['prediction'] = predict_score(data[['win1', 'winX', 'win2']].to_numpy().astype(np.float32))
     return data
 
-api_key = '0213302b8a454ed79f3524260cfcfede16639678e31347b3845991ed87a24dd9'
+api_key = '02ba29e94b3c44bfbd044c919e0c99c016cf7350ce1b49bf93b0370cf7d236f5'
 api_headers = {'Authorization':api_key}
 
 interpreter = tflite.Interpreter('model.tflite')
