@@ -27,7 +27,7 @@ def get_live_matches():
                 break
             except:
                 jsn = jsn[:-1]
-    matches = json.loads(r.content.decode())
+ #   matches = json.loads(r.content.decode())
     matches = [[match['id'], match['team1'], match['team2'], match['markets']['win1']['v'], match['markets']['winX']['v'], match['markets']['win2']['v'], match['league']['name'], match['league']['league_id'], 'Live'] for match in matches[:-1] if ('win1' in match['markets'].keys()) and ('winX' in match['markets'].keys()) and ('win2' in match['markets'].keys()) and ('league' in match.keys())]
     
     return matches
@@ -44,7 +44,7 @@ def get_pre_matches():
                 break
             except:
                 jsn = jsn[:-1]
-    matches = json.loads(r.content.decode())
+#    matches = json.loads(r.content.decode())
     matches = [[match['id'], match['team1'], match['team2'], match['markets']['win1']['v'], match['markets']['winX']['v'], match['markets']['win2']['v'], match['league']['name'], match['league']['league_id'], 'PreMatch'] for match in matches[:-1] if ('win1' in match['markets'].keys()) and ('winX' in match['markets'].keys()) and ('win2' in match['markets'].keys()) and ('league' in match.keys())]
     
     return matches
