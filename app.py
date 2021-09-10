@@ -16,7 +16,7 @@ import requests
 import json
 
 def get_live_matches():
-    r = requests.get(f'https://api.betting-api.com/leonbets/football/live/all', headers=api_headers)
+    r = requests.get(f'https://api.betting-api.com/1xbet/football/live/all', headers=api_headers)
     jsn = r.text
     try:
         matches = json.loads(jsn)
@@ -33,7 +33,7 @@ def get_live_matches():
     return matches
 
 def get_pre_matches():
-    r = requests.get(f'https://api.betting-api.com/leonbets/football/line/all', headers=api_headers)
+    r = requests.get(f'https://api.betting-api.com/1xbet/football/line/all', headers=api_headers)
     jsn = r.text
     try:
         matches = json.loads(jsn)
