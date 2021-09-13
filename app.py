@@ -50,9 +50,10 @@ def get_pre_matches():
     return matches
 
 def get_all_matches():
-    df = pd.DataFrame(get_live_matches(), columns = ['match_id', 'team1', 'team2', 'win1', 'winX', 'win2', 'league', 'league_id', 'state'])
-    df = df.append(pd.DataFrame(get_pre_matches(), columns = ['match_id', 'team1', 'team2', 'win1', 'winX', 'win2', 'league', 'league_id', 'state']), ignore_index=True)
+    # df = pd.DataFrame(get_live_matches(), columns = ['match_id', 'team1', 'team2', 'win1', 'winX', 'win2', 'league', 'league_id', 'state'])
+    # df = df.append(pd.DataFrame(get_pre_matches(), columns = ['match_id', 'team1', 'team2', 'win1', 'winX', 'win2', 'league', 'league_id', 'state']), ignore_index=True)
 
+    df = pd.read_csv('edits/offline-version/offline-dataset.csv', index_col = 'Unnamed: 0')
     return df
 
 def argmax(arr):
@@ -74,6 +75,7 @@ def predict_score(matches):
     for value in matches:
         interpreter.set_tensor(0, value.reshape(1, -1))
         interpreter.invoke()
+        np.random.seed(value.astype(np.int32))
         pred_h.append((interpreter.get_tensor(12) * np.random.rand(4))[0])
         pred_a.append(interpreter.get_tensor(14)[0])
     pred_h = decode_labels(pred_h)
@@ -174,6 +176,10 @@ def update_data(n):
 def update_score(match_id, options):
     if options:
         if match_id:
+            print(match_id)
+            print(data[data['match_id'] == match_id])
+            print(data[data['match_id'] == match_id]['prediction'])
+            
             return data[data['match_id'] == match_id]['prediction']
         else:
             return '???'
