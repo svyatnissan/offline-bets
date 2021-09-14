@@ -44,14 +44,13 @@ def get_pre_matches():
                 break
             except:
                 jsn = jsn[:-1]
-#    matches = json.loads(r.content.decode())
+
     matches = [[match['id'], match['team1'], match['team2'], match['markets']['win1']['v'], match['markets']['winX']['v'], match['markets']['win2']['v'], match['league']['name'], match['league']['league_id'], 'PreMatch'] for match in matches[:-1] if ('win1' in match['markets'].keys()) and ('winX' in match['markets'].keys()) and ('win2' in match['markets'].keys()) and ('league' in match.keys())]
     
     return matches
 
 def get_all_matches():
-    df = pd.DataFrame(get_live_matches(), columns = ['match_id', 'team1', 'team2', 'win1', 'winX', 'win2', 'league', 'league_id', 'state'])
-    df = df.append(pd.DataFrame(get_pre_matches(), columns = ['match_id', 'team1', 'team2', 'win1', 'winX', 'win2', 'league', 'league_id', 'state']), ignore_index=True)
+    df = pd.read_csv('edits/offline-version/offline-dataset.csv', index_col='Unnamed: 0')
 
     return df
 
@@ -152,7 +151,7 @@ def update_matches(ld):
         button_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
     matches = data[data['league_id'] == ld].drop(['league', 'league_id'], 1).itertuples(index = False, name = None)
-    return [{'label':f'{match[1]} - {match[2]} ({match[6]})', 'value':match[0]} for match in matches], None
+    return [{'label':f'{match[1]} - {match[2]} ({match[6]} {match[7]})', 'value':match[0]} for match in matches], None
 
 @app.callback(
     Output('leagues-dropdown', 'options'),
@@ -175,10 +174,6 @@ def update_data(n):
 def update_score(match_id, options):
     if options:
         if match_id:
-            print(match_id)
-            print(data[data['match_id'] == match_id])
-            print(data[data['match_id'] == match_id]['prediction'])
-            
             return data[data['match_id'] == match_id]['prediction']
         else:
             return '???'
