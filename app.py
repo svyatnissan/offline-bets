@@ -50,7 +50,7 @@ def get_pre_matches():
     return matches
 
 def get_all_matches():
-    df = pd.read_csv('edits/offline-version/offline-dataset.csv', index_col='Unnamed: 0')
+    df = pd.read_csv('offline-dataset.csv', index_col='Unnamed: 0')
 
     return df
 
